@@ -21,6 +21,8 @@ namespace Pong
         DXBox& GetBoundingBox() override { return boundingBox_; }
         float2& GetVelocity() override { return velocity_; }
 
+        void ApplySpeedBoost(float multiplier, float durationSeconds);
+
     private:
         static float Clamp(float x, float upper, float down);
 
@@ -30,7 +32,10 @@ namespace Pong
         DXBuffer* pAdditionDataBuffer_ = nullptr;
         float3 startPosition_;
         float3 offset_;
-        float startSpeed_ = 0;
+        float startSpeed_    = 0;
         float speedIncrease_ = 0;
+
+        float boostMultiplier_ = 1.0f;
+        float boostTimer_      = 0.0f;  // seconds remaining; 0 = no boost
     };
 }

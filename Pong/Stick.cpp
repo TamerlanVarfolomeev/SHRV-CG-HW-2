@@ -7,9 +7,10 @@ using namespace Pong;
 void Stick::Compose(const float2& center, const float2& size, Side side, float speed)
 {
     sprite_.Compose(center, size);
-    hand_ = side;
-    speed_ = speed;
-    boundingBox_ = DXBox(float3(center), float3(size));
+    hand_          = side;
+    speed_         = speed;
+    size_          = size;
+    boundingBox_   = DXBox(float3(center), float3(size));
     startPosition_ = float3(center);
 }
 
@@ -41,6 +42,13 @@ void Stick::Render(float delta)
     sprite_.GetPipeline()->GetDeviceContext()->VSSetConstantBuffers(0, 1, &pAdditionDataBuffer_);
 
     sprite_.Render(delta);
+}
+
+void Stick::Resize(float yFactor)
+{
+    size_.y *= yFactor;
+    boundingBox_.Extents.y = size_.y;
+    sprite_.UpdateSize(float2(startPosition_.x, startPosition_.y), size_);
 }
 
 float Stick::Clamp(float x, float upper, float down)

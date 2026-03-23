@@ -12,6 +12,9 @@ namespace Basic
             void Compose(const float2& center, const float2& size);
             void Compose(Engine::Render::Pipeline* pPipeline) override;
 
+            // Rebuild VB with new size (call after Compose(Pipeline*))
+            void UpdateSize(const float2& center, const float2& size);
+
         protected:
             float4 pointsSquare_[4 * 2]{};
             int32 indicesSquare_[3 * 2]{};

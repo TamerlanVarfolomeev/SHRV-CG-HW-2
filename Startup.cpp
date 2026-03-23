@@ -3,6 +3,7 @@
 #include "Pong/Counter.h"
 #include "Pong/DashedLine.h"
 #include "Pong/Menu.h"
+#include "Pong/Pickup.h"
 #include "Pong/Stick.h"
 #include "Pong/StickAI.h"
 #include "Pong/StickPlayer.h"
@@ -11,14 +12,10 @@
 int main()
 {
     auto* game = Game::Instance();
-
-    // Open the window and D3D device first, then show the in-game menu
     game->Compose(L"Pong", 0.01f);
-
     auto* menu = new Pong::Menu();
     game->GetRenderPipeline()->Add(menu);
 
-    // Menu loop – runs until the player confirms a choice
     int mode = -1;
     while (mode == -1)
     {
@@ -34,10 +31,8 @@ int main()
         game->GetRenderPipeline()->Render(0.0f);
     }
 
-    // Set up game objects based on selected mode
     auto* ball = new Pong::Ball();
     ball->Compose(float2(0, 0), float2(0.025f * 2 / 3, 0.025f), 1, 0.02f);
-
     auto* stick1 = new Pong::StickPlayer();
     stick1->Compose(float2(-0.9f, 0), float2(0.01f, 0.2f), Pong::Side::Left, 1, game->GetInputDevice());
 
@@ -69,15 +64,19 @@ int main()
     auto* dashedLine = new Pong::DashedLine();
     dashedLine->Compose(13, 0.01f, 0.05f);
 
-    // menu stays in the pipeline but renders nothing (active_ == false)
+    auto* pickup = new Pong::Pickup();
+    pickup->Compose(ball, stick1, stick2);
+
     game->GetRenderPipeline()->Add(dashedLine);
     game->GetRenderPipeline()->Add(counter);
     game->GetRenderPipeline()->Add(stick1);
     game->GetRenderPipeline()->Add(stick2);
     game->GetRenderPipeline()->Add(ball);
+    game->GetRenderPipeline()->Add(pickup);
     game->GetFixedUpdate()->Add(stick1);
     game->GetFixedUpdate()->Add(stick2);
     game->GetFixedUpdate()->Add(ball);
+    game->GetFixedUpdate()->Add(pickup);
     game->GetPhysicsCollide()->Add(stick1);
     game->GetPhysicsCollide()->Add(stick2);
     game->GetPhysicsCollide()->Add(ball);
@@ -85,6 +84,7 @@ int main()
     game->GetPhysicsCollide()->Add(wallDown);
     game->GetPhysicsCollide()->Add(wallLeft);
     game->GetPhysicsCollide()->Add(wallRight);
+    game->GetPhysicsCollide()->Add(pickup);
     game->GetPhysicsMove()->Add(stick1);
     game->GetPhysicsMove()->Add(stick2);
     game->GetPhysicsMove()->Add(ball);

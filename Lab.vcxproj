@@ -733,6 +733,8 @@
     <ClCompile Include="Pong\StickAI.cpp" />
     <ClCompile Include="Pong\StickPlayer.cpp" />
     <ClCompile Include="Pong\Wall.cpp" />
+    <ClCompile Include="Pong\Pickup.cpp" />
+    <ClCompile Include="Basic\Shapes\Circle.cpp" />
     <ClCompile Include="Startup.cpp">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </ClCompile>

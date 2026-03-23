@@ -44,3 +44,11 @@ void Square::Compose(Engine::Render::Pipeline* pPipeline)
 
     pPipeline_->GetDeviceContext()->RSSetState(pRasterizerState_);
 }
+
+void Square::UpdateSize(const float2& center, const float2& size)
+{
+    Compose(center, size);  // refill pointsSquare_ / pPoints_
+
+    if (pVertexBuffer_) { pVertexBuffer_->Release(); pVertexBuffer_ = nullptr; }
+    CreateVertexBuffer(4 * 2);
+}

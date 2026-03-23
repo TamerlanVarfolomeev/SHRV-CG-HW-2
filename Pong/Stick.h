@@ -27,15 +27,18 @@ namespace Pong
         DXBox& GetBoundingBox() override { return boundingBox_; }
         float2& GetVelocity() override { return velocity_; }
 
+        void Resize(float yFactor);
+
     protected:
         static float Clamp(float x, float upper, float down);
 
         Basic::Shapes::Square sprite_;
-        DXBox boundingBox_;
-        float2 velocity_;
+        DXBox   boundingBox_;
+        float2  velocity_;
         DXBuffer* pAdditionDataBuffer_ = nullptr;
-        Side hand_ = Side::None;
-        float speed_ = 0;
-        float3 startPosition_;
+        Side    hand_          = Side::None;
+        float   speed_         = 0;
+        float3  startPosition_;
+        float2  size_{};
     };
 }

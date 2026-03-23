@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+#include "Pickup.h"
 #include "ShaderData.h"
 #include "Stick.h"
 #include "../Game.h"
@@ -36,6 +37,26 @@ void Ball::Compose(Engine::Render::Pipeline* pPipeline)
 void Ball::FixedUpdate()
 {
     offset_ = boundingBox_.Center - startPosition_;
+
+    if (boostTimer_ > 0.0f)
+    {
+        boostTimer_ -= 0.01f;
+        if (boostTimer_ <= 0.0f)
+        {
+            velocity_ /= boostMultiplier_;
+            boostMultiplier_ = 1.0f;
+        }
+    }
+}
+
+void Ball::ApplySpeedBoost(float multiplier, float durationSeconds)
+{
+    if (boostTimer_ > 0.0f)
+        velocity_ /= boostMultiplier_;  // cancel previous boost first
+
+    boostMultiplier_ = multiplier;
+    boostTimer_      = durationSeconds;
+    velocity_       *= multiplier;
 }
 
 void Ball::Render(float delta)
@@ -56,6 +77,7 @@ void Ball::Render(float delta)
 void Ball::Collided(Engine::Physics::CollideAble* other)
 {
     const auto* pStick = dynamic_cast<Stick*>(other);
+    if (dynamic_cast<Pickup*>(other) != nullptr) return;
     const auto& otherBoundingBox = other->GetBoundingBox();
     if (pStick == nullptr)
     {
